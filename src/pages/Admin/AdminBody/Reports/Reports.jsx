@@ -6,6 +6,8 @@ import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
+import * as XLSX from 'xlsx';
+
 
 const Reports = () => {
   const [statistics, setStatistics] = useState({
@@ -27,7 +29,7 @@ const Reports = () => {
   const [manuals, setManuals] = useState(0);
   const [manualCopies, setManualCopies] = useState(0);
   const [dates, setDates] = useState('week');
-
+  const [data, setData] = useState('');
   const [values, setValues] = useState([
     {
         'fileType' : 'Module',
@@ -48,6 +50,28 @@ const Reports = () => {
     }
 ]);
 
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/requests/all');
+      const data = await response.json();
+      setData(data);
+    } catch (error) {
+      console.error('Error fetching records:', error);
+    }
+  };
+
+  fetchData();
+}, []);
+
+// Function to download the data as an Excel file
+const downloadExcel = () => {
+  // Prepare data for Excel
+  const worksheet = XLSX.utils.json_to_sheet(data); // Convert JSON to worksheet
+  const workbook = XLSX.utils.book_new(); // Create a new workbook
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Records'); // Append the worksheet
+  XLSX.writeFile(workbook, 'Records.xlsx'); // Trigger the file download
+};
 const handleDays = (event) => {
     setDates(event.target.value);
 }
@@ -106,7 +130,7 @@ useEffect(() => {
       },
       };
     
-    fetch("https://backimps-production.up.railway.app/records/getModules?dates=" + date.toISOString().substring(0,10), requestOptions).then((response)=> response.json()
+    fetch("http://localhost:8080/records/getModules?dates=" + date.toISOString().substring(0,10), requestOptions).then((response)=> response.json()
     ).then((data) => { setModules(data); 
     })
     .catch(error =>
@@ -115,7 +139,7 @@ useEffect(() => {
         }
     );
 
-    fetch("https://backimps-production.up.railway.app/requests/getModuleCopies?dates=" + date.toISOString().substring(0,10), requestOptions).then((response)=> response.json()
+    fetch("http://localhost:8080/requests/getModuleCopies?dates=" + date.toISOString().substring(0,10), requestOptions).then((response)=> response.json()
     ).then((data) => { setModuleCopies(data); 
     })
     .catch(error =>
@@ -124,7 +148,7 @@ useEffect(() => {
         }
     );
 
-    fetch("https://backimps-production.up.railway.app/records/getOfficeForms?dates=" + date.toISOString().substring(0,10), requestOptions).then((response)=> response.json()
+    fetch("http://localhost:8080/records/getOfficeForms?dates=" + date.toISOString().substring(0,10), requestOptions).then((response)=> response.json()
     ).then((data) => { setOfficeForms(data);})
     .catch(error =>
         {
@@ -132,7 +156,7 @@ useEffect(() => {
         }
     );
 
-    fetch("https://backimps-production.up.railway.app/requests/getOfficeFormCopies?dates=" + date.toISOString().substring(0,10), requestOptions).then((response)=> response.json()
+    fetch("http://localhost:8080/requests/getOfficeFormCopies?dates=" + date.toISOString().substring(0,10), requestOptions).then((response)=> response.json()
     ).then((data) => { setOfficeCopies(data);;
     })
     .catch(error =>
@@ -141,7 +165,7 @@ useEffect(() => {
         }
     );
 
-    fetch("https://backimps-production.up.railway.app/records/getExams?dates=" + date.toISOString().substring(0,10), requestOptions).then((response)=> response.json()
+    fetch("http://localhost:8080/records/getExams?dates=" + date.toISOString().substring(0,10), requestOptions).then((response)=> response.json()
     ).then((data) => { setExams(data); })
     .catch(error =>
         {
@@ -149,7 +173,7 @@ useEffect(() => {
         }
     );
 
-    fetch("https://backimps-production.up.railway.app/requests/getExamCopies?dates=" + date.toISOString().substring(0,10), requestOptions).then((response)=> response.json()
+    fetch("http://localhost:8080/requests/getExamCopies?dates=" + date.toISOString().substring(0,10), requestOptions).then((response)=> response.json()
     ).then((data) => { setExamCopies(data); 
     })
     .catch(error =>
@@ -158,7 +182,7 @@ useEffect(() => {
         }
     );
 
-    fetch("https://backimps-production.up.railway.app/records/getManuals?dates=" + date.toISOString().substring(0,10), requestOptions).then((response)=> response.json()
+    fetch("http://localhost:8080/records/getManuals?dates=" + date.toISOString().substring(0,10), requestOptions).then((response)=> response.json()
     ).then((data) => { setManuals(data);})
     .catch(error =>
         {
@@ -166,7 +190,7 @@ useEffect(() => {
         }
     );
 
-    fetch("https://backimps-production.up.railway.app/requests/getManualCopies?dates=" + date.toISOString().substring(0,10), requestOptions).then((response)=> response.json()
+    fetch("http://localhost:8080/requests/getManualCopies?dates=" + date.toISOString().substring(0,10), requestOptions).then((response)=> response.json()
     ).then((data) => { setManualCopies(data);
     })
     .catch(error =>
@@ -202,7 +226,7 @@ useEffect(() => {
   const header = renderHeader();
 
   useEffect(() => {
-    fetch('https://backimps-production.up.railway.app/records/requestCounts')
+    fetch('http://localhost:8080/records/requestCounts')
       .then((response) => response.json())
       .then((data) => {
         const totalRequests =
@@ -246,7 +270,7 @@ useEffect(() => {
         ],
         backgroundColor: [
           '#c13e90',
-          'rgb(240, 158, 34))',
+          'rgb(240, 158, 34)',
           '#1672d4',
           'rgb(36, 235, 136)',
           'yellow',
@@ -304,9 +328,9 @@ useEffect(() => {
           </div>
         </div>
       </div>
-      <button id="dlButton" onClick={downloadReport}>
+      <button id="dlButton" onClick={downloadExcel}>
         Download Report
-      </button>
+      </button> 
     </div>
   );
 };

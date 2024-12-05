@@ -36,7 +36,7 @@ const ForgotPassContent = () => {
             'Content-Type': 'application/json',
         },
         };
-            fetch("https://backimps-production.up.railway.app/services/CheckEmail"  + "?email=" + email, requestOptions).then((response)=> response.json()
+            fetch("http://localhost:8080/services/CheckEmail"  + "?email=" + email, requestOptions).then((response)=> response.json()
             ).then((data) => {
               if(data === true){
                   const requestOptions2 = {
@@ -46,7 +46,7 @@ const ForgotPassContent = () => {
                         'Content-Type': 'application/json',
                     },
                     };
-                  fetch("https://backimps-production.up.railway.app/services/ForgotPasswordStep1"  + "?email=" + email, requestOptions2).then((response)=> response.json()
+                  fetch("http://localhost:8080/services/ForgotPasswordStep1"  + "?email=" + email, requestOptions2).then((response)=> response.json()
                   ).then((data) => {if(data===true){
                     setShow1('inactive-step'); 
                     setShow2('active-step');
@@ -81,7 +81,7 @@ const ForgotPassContent = () => {
             'Content-Type': 'application/json',
         },
         };
-            fetch("https://backimps-production.up.railway.app/services/ForgotPasswordStep2"  + "?email=" + email + "&token=" + token, requestOptions).then((response)=> response.json()
+            fetch("http://localhost:8080/services/ForgotPasswordStep2"  + "?email=" + email + "&token=" + token, requestOptions).then((response)=> response.json()
             ).then((data) => {
               if(data === true){
                 setContainer('fp-container2');
@@ -109,7 +109,7 @@ const ForgotPassContent = () => {
             'Content-Type': 'application/json',
         },
         };
-            fetch("https://backimps-production.up.railway.app/services/ForgotPasswordStep3"  + "?password=" + password + "&email=" + email + "&token=" + token, requestOptions).then((response)=> response.json()
+            fetch("http://localhost:8080/services/ForgotPasswordStep3"  + "?password=" + password + "&email=" + email + "&token=" + token, requestOptions).then((response)=> response.json()
             ).then((data) => {
               console.log(data);
               infoPop('Password changed successfully!');

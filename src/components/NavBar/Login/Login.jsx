@@ -35,10 +35,8 @@ const Login = () => {
         navigate('/head');
       } else if(role === 'staff'){
         navigate('/staff')
-      } else if(role === 'Office Employee'){
+      } else if(role === 'Administrative' || role == "Academic"){
         navigate('/home')
-      } else if(role === 'Faculty Employee'){
-        navigate('/home');
       } else{
         navigate('/');
       }
@@ -54,7 +52,7 @@ const Login = () => {
           },
       };
 
-      fetch("https://backimps-production.up.railway.app/services/userLogin?email=" + email + "&password=" + password, requestOptions)
+      fetch("http://localhost:8080/services/userLogin?email=" + email + "&password=" + password, requestOptions)
           .then((response) => response.json())
           .then((data) => {
               if (data.status === true) {
@@ -68,7 +66,7 @@ const Login = () => {
                   localStorage.setItem("isHead", isHead);
                   localStorage.setItem("isStaff", isStaff);
 
-                  fetch("https://backimps-production.up.railway.app/services/getname?email=" + email, requestOptions)
+                  fetch("http://localhost:8080/services/getname?email=" + email, requestOptions)
                       .then((response) => response.json())
                       .then((data) => {
                           localStorage.setItem("firstName", data['firstName']);
@@ -78,7 +76,7 @@ const Login = () => {
                           localStorage.setItem("college", data['college']);
                           localStorage.setItem("accType", data['accType']);
 
-                          fetch("https://backimps-production.up.railway.app/services/getid?email=" + email, requestOptions)
+                          fetch("http://localhost:8080/services/getid?email=" + email, requestOptions)
                               .then((response) => response.json())
                               .then((data) => {
                                   localStorage.setItem("userID", data['userID']);
@@ -96,7 +94,7 @@ const Login = () => {
                                     } else if (data['role'] === 'staff') {
                                       setRole(data['role']);
                                       infoPop('Successfully Login!');
-                                    } else if (data['role'] === 'Faculty Employee' || data['role'] === 'Office Employee') {
+                                    } else if (data['role'] === 'Academic' || data['role'] === 'Administrative') {
                                         localStorage.setItem("department", data['department']);
                                         localStorage.setItem("schoolId", data['schoolId']);
                                         localStorage.setItem("college", data['college']);

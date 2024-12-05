@@ -24,42 +24,68 @@ const RegisterBody = () => {
     const [college, setCollege] = useState('');
     const [office, setOffice] = useState('');
 
-    const colleges = {
-        'College of Engineering and Architecture (CEA)': [
-            'Architecture', 'Chemical Engineering', 'Civil Engineering', 'Computer Engineering',
-            'Electrical Engineering', 'Electronics Engineering', 'Industrial Engineering', 'Mechanical Engineering', 'Mining Engineering'
-        ],
-        'College of Computer Studies (CSS)': [
-            'Information Technology', 'Computer Science'
-        ],
-        'College of Arts, Science and Education (CASE)': [
+    const academicColleges = {
+        'College of Arts and Science Education (CASE)': [
+            'Department of Humanities and Behavioral Sciences (DHBS)',
+            'Department of Language, Literature and Communication (DLLC)',
             'Department of Mathematics and Natural Sciences (DMNS)',
-            'Department of Languages, Literature, and Communication (DLLC)',
-            'Department of Humanities and Behavioral Sciences (DHBS)', 'Teacher-Education', 'Physical Education Department'
+            'Physical Education',
+            'Teacher – Education',
         ],
-        'College of Management, Business and Accountancy (CMBA)': [
-            'Accountancy Department', 'Business Administration Department', 'Office Administration Department', 'Public Administration', 'Hospitality and Tourism Management Department'
+        'College of Computer Studies (CCS)': [
+            'Computer Science Department',
+            'Information Technology Department',
+        ],
+        'College of Criminal Justice (CCJ)': ['Criminal Justice Department'],
+        'College of Engineering and Architecture (CEA)': [
+            'Architecture Department',
+            'Chemical Engineering Department',
+            'Civil Engineering Department',
+            'Computer Engineering Department',
+            'Electrical Engineering Department',
+            'Electronics Engineering Department',
+            'Industrial Engineering Department',
+            'Mechanical Engineering Department',
+            'Mining Engineering Department',
+        ],
+        'College of Management and Business Accountancy (CMBA)': [
+            'Accountancy Department',
+            'Business Administration Department',
+            'Hospitality and Tourism Management Department',
+            'Office Administration Department',
+            'Public Administration Department',
         ],
         'College of Nursing and Allied Health Sciences (CNAAHS)': [
-            'Bachelor of Science in Nursing', 'BS Pharmacy'
+            'Nursing Department',
+            'Pharmacy Department',
         ],
-        'College of Criminal Justice (CCJ)': [
-            'Bachelor of Science in Criminology'
-        ]
+        'Elementary': [],
+        'Junior High School': [],
+        'Senior High School': [],
+        'University Library': [],
+        'Vice Presidents for Academic Affairs': [],
     };
 
-    // Dropdown data for Offices
-    const offices = [
-        'Office of the University President', 'Office of the University Vice President', 'Library',
-        'University Registrar’s Office', 'Guidance Center', 'Student Success Office',
-        'Office of Admission and Scholarships', 'Alumni Affairs Office', 'Medical and Dental Clinic',
-        'Accounting', 'Safety and Security Office', 'Office of Property Custodian',
-        'Innovation and Technology Support Office', 'Community Extension Services Office',
-        'Enrolment Technical Office', 'Information Systems Development Office', 'Center for E-Learning and Technology Education',
-        'Instructional Materials and Publication Office', 'Technical Support Group',
-        'Multimedia Solutions and Documentation Office', 'Athletics', 'Wildcat Innovation Labs',
-        'Makerspace', 'Research and Development Coordinating Office'
+    const administrativeOffices = [
+        'Accountancy Office', 'AI Fab Lab', 'Architecture Office', 'Athletics',
+        'Business Administration Office', 'Community Extension Service (CES) & National Service Training Program (NSTP)',
+        'Chemical Engineering Office', 'Civil Engineering Office', 'Computer Engineering Office', 'Computer Science Office',
+        'CREATE', 'Criminal Justice Office', 'CV FIC', 'Dept of Engineering Math, Physics and Chemistry',
+        'Dept of Languages, Literature and Communication', 'Dept of Mathematics and Natural Sciences',
+        'Electrical Engineering Office', 'Electronics Engineering Office', 'Elementary Office',
+        'Enrollment Technical Office', 'Finance Office', 'Guidance Center',
+        'Hospitality and Tourism Management Office', 'Human Resources Office (HRO)', 'Humanities & Behavioral Sciences',
+        'Instructional Materials and Publication Office (IMPO)', 'Industrial Engineering Office',
+        'Information Technology Office', 'JHS and SHS Office', 'Legal & Corporate Affairs Office', 'Library',
+        'Marketing Office', 'Medical and Dental Clinic (MDC)', 'Mechanical Engineering Office',
+        'Mining Engineering Office', 'MIS & External Affairs Office', 'Multimedia Solutions and Documentation Office (MSDO)',
+        'Nursing Office', 'Office of Admission and Scholarship (OAS)', 'Office of Property Custodian (OPC)',
+        'Office of the University President', 'Office of the University Vice President', 'Pharmacy Office',
+        'Physical Education Office', 'Public Administration Office (PAO)', 'Registrar',
+        'Research and Development Coordinating Office (RDCO)', 'SSD', 'Student Success Office (SSO)',
+        'Technical Support Group (TSG)', 'Wildcats Innovation Lab (WIL)',
     ];
+
 
     const infoPop = (message, isSuccess = false) => {
         setAlert('show');
@@ -77,14 +103,11 @@ const RegisterBody = () => {
     const handleEmployeeType = (e) => {
         const selectedType = e.target.value;
         setEmployeeType(selectedType);
-    
-        // Set role based on the selected employee type
-        if (selectedType === 'faculty') {
-            setRole('Faculty Employee');
-            console.log('Selected role: Faculty Employee');
-        } else if (selectedType === 'office') {
-            setRole('Office Employee');
-            console.log('Selected role: Office Employee');
+
+        if (selectedType === 'academic') {
+            setRole('Academic');
+        } else if (selectedType === 'administrative') {
+            setRole('Administrative');
         }
     };
     
@@ -118,7 +141,10 @@ const RegisterBody = () => {
             infoPop('Please select both a college and a department.');
             return;
         }
-    
+        if (college === 'Elementary' || college === "Junior High School" || college === "Senior High School" || college === "University Library" || college === "Vice President for Academic Affairs"){
+            setDepartment(college);
+            console.log(department);
+        }
         if (employeeType === 'office' && !office) {
             infoPop('Please select an office.');
             return;
@@ -135,21 +161,21 @@ const RegisterBody = () => {
         }
         const date = new Date().toISOString();
         // Check for existing email
-        fetch(`https://backimps-production.up.railway.app/services/exists?email=${email}`, requestOptionsGET)
+        fetch(`http://localhost:8080/services/exists?email=${email}`, requestOptionsGET)
             .then((response) => response.json())
             .then((data) => {
                 if (data === true) {
                     infoPop('That email is already in use! Please use another email.');
                 } else {
                     // Check for existing school ID
-                    fetch(`https://backimps-production.up.railway.app/services/exists?schoolId=${schoolId}`, requestOptionsGET)
+                    fetch(`http://localhost:8080/services/exists?schoolId=${schoolId}`, requestOptionsGET)
                         .then((response) => response.json())
                         .then((data) => {
                             if (data === true) {
                                 infoPop('That School ID is already in use! Please use another School ID.');
                             } else {
                                 // Proceed with registration
-                                fetch(`https://backimps-production.up.railway.app/services/NewUserRegistration?firstName=${firstName}&lastName=${lastName}&password=${password}&email=${email}&schoolId=${schoolId}&employeeType=${employeeType}&role=${role}&adminVerified=${adminVerified}&college=${college}&department=${department}&office=${office}&createdDate=${date}`, requestOptionsPOST)
+                                fetch(`http://localhost:8080/services/NewUserRegistration?firstName=${firstName}&lastName=${lastName}&password=${password}&email=${email}&schoolId=${schoolId}&employeeType=${employeeType}&role=${role}&adminVerified=${adminVerified}&college=${college}&department=${department}&office=${office}&createdDate=${date}`, requestOptionsPOST)
                                     .then((response) => response.json())
                                     .then(() => {
                                         infoPop("Registration successful! Wait for admin's confirmation", true);
@@ -272,64 +298,70 @@ const RegisterBody = () => {
 
                         <label htmlFor="employeeType"></label>
                         <select
+                                className="regShad"
                                 style={{fontSize: '.85em', marginLeft: '1.5vw'}}
                                 defaultValue={employeeType} onChange={handleEmployeeType}
                                 required
                             >
                                 <option value="" disabled>Select Employee Type</option>
-                                <option value="faculty">Faculty Employee</option>
-                                <option value="office">Office Employee</option>
+                                <option value="academic">Academic Employee</option>
+                                <option value="administrative">Administrative Employee</option>
                         </select>
-                
-                        {employeeType === 'faculty' && (
+
+                        {employeeType === 'academic' && (
                             <>
                                 <label>
                                     <select
-                                        style={{marginLeft: '1.5vw'}}
+                                        style={{ marginLeft: '1.5vw' }}
                                         className="regShad"
                                         value={college}
                                         onChange={(e) => setCollege(e.target.value)}
                                         required
                                     >
-                                        <option value="" disabled>Select College</option>
-                                        {Object.keys(colleges).map((collegeName) => (
-                                            <option key={collegeName} value={collegeName}>{collegeName}</option>
+                                        <option value="" disabled>Select Academic College/Level</option>
+                                        {Object.keys(academicColleges).map((collegeName) => (
+                                            <option key={collegeName} value={collegeName}>
+                                                {collegeName}
+                                            </option>
                                         ))}
                                     </select>
                                 </label>
-    
-                                {college && (
+
+                                {college && academicColleges[college].length > 0 && (
                                     <label>
                                         <select
-                                        style={{marginLeft: '1.5vw'}}
+                                            style={{ marginLeft: '1.5vw' }}
                                             className="regShad"
                                             value={department}
                                             onChange={(e) => setDepartment(e.target.value)}
                                             required
                                         >
                                             <option value="" disabled>Select Department</option>
-                                            {colleges[college].map((dept, index) => (
-                                                <option key={index} value={dept}>{dept}</option>
+                                            {academicColleges[college].map((dept, index) => (
+                                                <option key={index} value={dept}>
+                                                    {dept}
+                                                </option>
                                             ))}
                                         </select>
                                     </label>
                                 )}
                             </>
                         )}
-    
-                        {/* Show Office if Office Employee */}
-                        {employeeType === 'office' && (
+
+                        {employeeType === 'administrative' && (
                             <label>
                                 <select
-                                    style={{marginLeft: '1.5vw'}}
+                                    style={{ marginLeft: '1.5vw' }}
                                     className="regShad"
                                     value={office}
                                     onChange={(e) => setOffice(e.target.value)}
                                     required
                                 >
-                                    <option value="" disabled>Select Office</option>
-                                    {offices.map((officeName, index) => (
-                                        <option key={index} value={officeName}>{officeName}</option>
+                                    <option value="" disabled>Select Administrative Office</option>
+                                    {administrativeOffices.map((officeName, index) => (
+                                        <option key={index} value={officeName}>
+                                            {officeName}
+                                        </option>
                                     ))}
                                 </select>
                             </label>

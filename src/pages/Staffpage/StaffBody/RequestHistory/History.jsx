@@ -126,10 +126,10 @@ const History = ({reqHistory}) => {
                     mode: 'cors',
                     body: commentData
                   };
-                fetch("https://backimps-production.up.railway.app/comments/newComment", requestOptionsComment)
+                fetch("http://localhost:8080/comments/newComment", requestOptionsComment)
                 .then((response)=> response.json()
                                         ).then((data) => {
-                                            fetch("https://backimps-production.up.railway.app/comments/id?id=" + requestID, requestOptions).then((response)=> response.json()
+                                            fetch("http://localhost:8080/comments/id?id=" + requestID, requestOptions).then((response)=> response.json()
                                             ).then((data) => { 
                                                 setComments(data);
                                                 setEditable(true);
@@ -160,7 +160,7 @@ const History = ({reqHistory}) => {
               'Content-Type': 'application/json',
             },
             };
-            fetch("https://backimps-production.up.railway.app/records/completedStatus?requestID=" + requestID + "&role=" + role + "&status=Completed&email=" + email  + "&userID=" + userID + "&date=" + currentDate, requestOptions).then((response)=> response.json()
+            fetch("http://localhost:8080/records/completedStatus?requestID=" + requestID + "&role=" + role + "&status=Completed&email=" + email  + "&userID=" + userID + "&date=" + currentDate, requestOptions).then((response)=> response.json()
             ).then((data) => {
                 showInfoPop(`Request Completed!`, true);
                 window.location.reload();})
@@ -186,7 +186,7 @@ const History = ({reqHistory}) => {
               'Content-Type': 'application/json',
             },
             };
-            fetch("https://backimps-production.up.railway.app/records/claimedStatus?requestID=" + requestID + "&role=" + role + "&status=Claimed&email=" + email  + "&userID=" + userID + "&date=" + currentDate, requestOptions).then((response)=> response.json()
+            fetch("http://localhost:8080/records/claimedStatus?requestID=" + requestID + "&role=" + role + "&status=Claimed&email=" + email  + "&userID=" + userID + "&date=" + currentDate, requestOptions).then((response)=> response.json()
             ).then((data) => {
                 showInfoPop(`Request Claimed!`, true);
                 window.location.reload();})
@@ -222,7 +222,7 @@ const History = ({reqHistory}) => {
               'Content-Type': 'application/json',
             },
             };
-            fetch("https://backimps-production.up.railway.app/records/rejectedStatus?requestID=" + requestID + "&role=" + role + "&status=Rejected&email=" + email  + "&userID=" + userID + "&date=" + currentDate, requestOptions).then((response)=> response.json()
+            fetch("http://localhost:8080/records/rejectedStatus?requestID=" + requestID + "&role=" + role + "&status=Rejected&email=" + email  + "&userID=" + userID + "&date=" + currentDate, requestOptions).then((response)=> response.json()
             ).then((data) => {window.location.reload();})
             .catch(error =>
                 {
@@ -260,7 +260,7 @@ const History = ({reqHistory}) => {
           },
           };
 
-          fetch("https://backimps-production.up.railway.app/requests/id?id=" + event.data.requestID + "&fileName=" + event.data.fileName, requestOptions).then((response)=> response.json()
+          fetch("http://localhost:8080/requests/id?id=" + event.data.requestID + "&fileName=" + event.data.fileName, requestOptions).then((response)=> response.json()
             ).then((data) => { 
                 setFileName(data['fileName']);
                 setDepartment(data['department']);
@@ -285,7 +285,7 @@ const History = ({reqHistory}) => {
                 setRequesterEmail(data['requesterEmail']);
                 setRequesterName(data['requesterName']);
                 setContactNumber(data['requesterNumber']);
-                fetch("https://backimps-production.up.railway.app/records/requestid?id=" + event.data.requestID, requestOptions).then((response)=> response.json()
+                fetch("http://localhost:8080/records/requestid?id=" + event.data.requestID, requestOptions).then((response)=> response.json()
                 ).then((data) => { 
                     setStatus(data['status']);
                     if(data['status'] === 'Rejected'){
@@ -317,7 +317,7 @@ const History = ({reqHistory}) => {
                         setStatus('Claimed');
                         setStatusClass('capsuleClaimed');
                     } 
-                    fetch("https://backimps-production.up.railway.app/comments/id?id=" + event.data.requestID, requestOptions).then((response)=> response.json()
+                    fetch("http://localhost:8080/comments/id?id=" + event.data.requestID, requestOptions).then((response)=> response.json()
                     ).then((data) => { 
                         setComments(data);
                         if(data[0].sentBy == 'Head'){
@@ -394,7 +394,7 @@ const History = ({reqHistory}) => {
           },
         };
     
-        fetch("https://backimps-production.up.railway.app/records/all", requestOptions)
+        fetch("http://localhost:8080/requests/all", requestOptions)
             .then((response) => response.json())
             .then((data) => {
                 const statusMap = {
@@ -423,18 +423,54 @@ const History = ({reqHistory}) => {
     return(
         <div>
         <div id="pendingTable">
-            <DataTable value={values} scrollable scrollHeight="30vw" header={header} globalFilterFields={['requestersName', 'requestID', 'fileName', 'requestDate']}
-                filters={filters} emptyMessage="No records found."
-                paginator rows={8}
-                tableStyle={{ minWidth: '20vw' }} selectionMode="single" onRowSelect={onRowSelect}>
-                <Column field="requestersName" header="Requester's Name"></Column>
-                <Column field="requestID" header="Request ID"sortable></Column>
-                <Column field="fileType" header="File Type"sortable></Column>
-                <Column field="fileName" header="File Name"></Column>
-                <Column field="requestDate" header="Request Date"></Column>
-                <Column field="useDate" header="Use Date"></Column>
-                <Column field="status" header="Status" body={renderSeverityTag}sortable></Column>
-            </DataTable>
+        <DataTable 
+                value={values} 
+                scrollable 
+                scrollHeight="30vw" 
+                header={header} 
+                globalFilterFields={['requesterName', 'college', 'department', 'requestID', 'description', 'colored', 'fileType', 'fileName', 'paperSize', 'paperType', 'requestDate', 'requestTime', 'role']}
+                filters={filters} 
+                emptyMessage="No records found."
+                paginator 
+                rows={8}
+                tableStyle={{ minWidth: '20vw' }} 
+                onRowSelect={onRowSelect}
+                selectionMode="single"
+                >
+                    <Column field="requesterName" header="Requester's Name" sortable headerStyle={{ width: '150px', whiteSpace: 'nowrap' }}></Column>
+                    
+                    {/* Custom rendering logic for the College column */}
+                    <Column 
+                        field="college" 
+                        header="College" 
+                        sortable 
+                        headerStyle={{ width: '150px', whiteSpace: 'nowrap' }}
+                        body={(rowData) => (
+                            rowData.college === "Elementary" || 
+                            rowData.college === "Junior High School" || 
+                            rowData.college === "Senior High School" ||
+                            rowData.college === "University Library" ||
+                            rowData.college === "Vice President for Academic Affairs" 
+                                ? "" // Show empty if it's one of the specified levels
+                                : rowData.college // Show actual college value otherwise
+                        )}
+                    ></Column>
+                    
+                    <Column field="department" header="Department" sortable headerStyle={{ width: '150px', whiteSpace: 'nowrap' }}></Column>
+                    <Column field="requestID" header="Request ID" sortable headerStyle={{ width: '150px', whiteSpace: 'nowrap' }}></Column>
+                    <Column field="fileType" header="File Type" sortable headerStyle={{ width: '150px', whiteSpace: 'nowrap' }}></Column>
+                    <Column field="fileName" header="File Name" sortable headerStyle={{ width: '150px', whiteSpace: 'nowrap' }}></Column>
+                    <Column field="description" header="Description" sortable headerStyle={{ width: '150px', whiteSpace: 'nowrap' }}></Column>
+                    <Column field="noOfCopies" header="No. of Copies" sortable headerStyle={{ width: '150px', whiteSpace: 'nowrap' }}></Column>
+                    <Column field="colored" header="Colored" sortable headerStyle={{ width: '150px', whiteSpace: 'nowrap' }}></Column>
+                    <Column field="paperSize" header="Paper Size" sortable headerStyle={{ width: '150px', whiteSpace: 'nowrap' }}></Column>
+                    <Column field="paperType" header="Paper Type" sortable headerStyle={{ width: '150px', whiteSpace: 'nowrap' }}></Column>
+                    <Column field="requestDate" header="Request Date" sortable headerStyle={{ width: '150px', whiteSpace: 'nowrap' }}></Column>
+                    <Column field="requestTime" header="Request Time" sortable headerStyle={{ width: '150px', whiteSpace: 'nowrap' }}></Column>
+                    <Column field="useDate" header="Use Date" sortable headerStyle={{ width: '150px', whiteSpace: 'nowrap' }}></Column>
+                    <Column field="role" header="Role" sortable headerStyle={{ width: '150px', whiteSpace: 'nowrap' }}></Column>
+                    <Column field="status" header="Status" body={renderSeverityTag} headerStyle={{ width: '150px', paddingRight: '150px', whiteSpace: 'nowrap' }}></Column>
+                </DataTable>
         </div>
         <div id="overlay" className={show} onClick={closeModal}></div>
         <div id="requestBox" className={show}>
@@ -481,12 +517,18 @@ const History = ({reqHistory}) => {
                 <div id='contactDeets' style={{marginBottom:'.5vw'}}>REQUESTER'S INFORMATION</div>
                 <div className='infoLine'>Name: <div className='contactItem'>{requesterName}</div></div>
                 <div className='infoLine'>Email: <div className='contactItem'>{requesterEmail}</div></div>
-                {role === "Faculty Employee" ? (
+                {role === "Academic" ? (
                         <>
                             <div className='infoLine'>Department: <div className='contactItem'>{department}</div></div>
-                            <div className='infoLine'>College: <div className='contactItem'>{college}</div></div>
+                            {college !== "Elementary" && 
+                            college !== "Junior High School" && 
+                            college !== "Senior High School" &&
+                            college !== "University Library" &&
+                            college !== "Vice President for Academic Affairs" && (
+                                <div className='infoLine'>College: <div className='contactItem'>{college}</div></div>
+                            )}
                         </>
-                    ) : role === "Office Employee" ? (
+                    ) : role === "Administrative" ? (
                         <>
                             <div className='infoLine'>Office: <div className='contactItem'>{office}</div></div>
                         </>

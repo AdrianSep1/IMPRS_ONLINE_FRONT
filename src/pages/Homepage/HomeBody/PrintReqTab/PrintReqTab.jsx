@@ -182,7 +182,7 @@ function PrintReq({ onRequestSubmitted }) {
                                     body: data
                                 };
     
-                                fetch("https://backimps-production.up.railway.app/requests/newRequest", requestOptions)
+                                fetch("http://localhost:8080/requests/newRequest", requestOptions)
                                     .then((response) => response.json())
                                     .then((data) => {
                                         if (comment !== '') {
@@ -191,7 +191,7 @@ function PrintReq({ onRequestSubmitted }) {
                                                 mode: 'cors',
                                                 body: commentData,
                                             };
-                                            fetch("https://backimps-production.up.railway.app/comments/newComment", requestOptionsComment)
+                                            fetch("http://localhost:8080/comments/newComment", requestOptionsComment)
                                                 .then((response) => response.json())
                                                 .then((data) => {
                                                     console.log(data);
@@ -217,7 +217,7 @@ function PrintReq({ onRequestSubmitted }) {
                     mode: 'cors',
                     body: data,
                 };
-                fetch("https://backimps-production.up.railway.app/requests/newRequest", requestOptions)
+                fetch("http://localhost:8080/requests/newRequest", requestOptions)
                     .then((response) => response.json())
                     .then((data) => {
                         if (comment !== '') {
@@ -226,7 +226,7 @@ function PrintReq({ onRequestSubmitted }) {
                                 mode: 'cors',
                                 body: commentData,
                             };
-                            fetch("https://backimps-production.up.railway.app/comments/newComment", requestOptionsComment)
+                            fetch("http://localhost:8080/comments/newComment", requestOptionsComment)
                                 .then((response) => response.json())
                                 .then((data) => {
                                     console.log(data);
@@ -274,7 +274,7 @@ function PrintReq({ onRequestSubmitted }) {
         }
 
         if(value !== 'Select'){
-        fetch("https://backimps-production.up.railway.app/records/generateid?fileType=" + value, requestOptions).then((response)=> response.json()
+        fetch("http://localhost:8080/records/generateid?fileType=" + value, requestOptions).then((response)=> response.json()
         ).then((data) => { setRequestID(tag + (data+1).toString());})
         .catch(error =>
         {
@@ -355,7 +355,7 @@ function PrintReq({ onRequestSubmitted }) {
                     accept="application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" 
                     className="fileinput"
                     onChange={handleFile} 
-                    disabled={giveExam} 
+                    disabled={giveExam || init} 
                 />
                     {/* <div className='fileDescL'>File Description:</div> */}
                         <textarea className='fileDesc' wrap="soft" placeholder="File Description" disabled={init} value={description} onChange={(e) => {setDescription(e.target.value)}}/>
@@ -367,21 +367,62 @@ function PrintReq({ onRequestSubmitted }) {
                     <input className='nameText' wrap='soft' placeholder="Name" value={name} disabled={true} />
                     <div className='email'>Email</div>
                     <input className='emailText' wrap='soft' placeholder="Email" value={email} disabled={true} />
-                    {role === "Faculty Employee" ? (
+                    {role === "Academic" ? (
                         <>
                             <div className='department'>Department</div>
-                            <input className='departmentText' wrap='soft' placeholder="Department" value={department} disabled={true} />
-                            <div className='college'>College</div>
-                            <input className='collegeText' wrap='soft' placeholder="College" value={college} disabled={true} />
+                            <input 
+                                className='departmentText' 
+                                wrap='soft' 
+                                placeholder="Department" 
+                                value={department} 
+                                disabled={true} 
+                            />
+                            {college !== "Elementary" && 
+                            college !== "Junior High School" && 
+                            college !== "Senior High School" &&
+                            college !== "University Library" &&
+                            college !== "Vice President for Academic Affairs" && (
+                                <>
+                                    <div className='college'>College</div>
+                                    <input 
+                                        className='collegeText' 
+                                        wrap='soft' 
+                                        placeholder="College" 
+                                        value={college} 
+                                        disabled={true} 
+                                    />
+                                </>
+                            )}
                             <div className='comments'>Additional Comments/Instructions</div>
-                            <textarea className='commentBox' wrap='soft' placeholder="Comments/Instructions" value={comment} disabled={init} onChange={handleComment}/>
+                            <textarea 
+                                className='commentBox' 
+                                wrap='soft' 
+                                placeholder="Comments/Instructions" 
+                                value={comment} 
+                                disabled={init} 
+                                onChange={handleComment}
+                            />
                         </>
-                    ) : role === "Office Employee" ? (
+                    ) : role === "Administrative" ? (
                         <>
                             <div className='department'>Office</div>
-                            <input className='departmentText' wrap='soft' placeholder="Office" value={office} disabled={true} />
-                            <div className='comments' style={{marginTop: '-3vw'}}>Additional Comments/Instructions</div>
-                            <textarea style={{marginTop: '-3vw'}} className='commentBox' wrap='soft' placeholder="Comments/Instructions" value={comment} disabled={init} onChange={handleComment}/>
+                            <input 
+                                className='departmentText' 
+                                wrap='soft' 
+                                placeholder="Office" 
+                                value={office} 
+                                disabled={true} 
+                            />
+                            <div className='comments' style={{ marginTop: '-3vw' }}>Additional Comments/Instructions</div>
+                            <textarea 
+                                style={{ marginTop: '-3vw' }} 
+                                className='commentBox' 
+                                wrap='soft' 
+                                placeholder="Comments/Instructions" 
+                                value={comment} 
+                                disabled={init} 
+                                onChange={handleComment}
+                            />
                         </>
                     ) : null}
 

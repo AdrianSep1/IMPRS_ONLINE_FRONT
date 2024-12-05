@@ -11,10 +11,20 @@
   padding: 20px; /* Adjusted padding for a more compact layout */
 }
 
+#dashboardTable {
+  transform:scale(0.7);
+  width:110vw;
+  margin-left: -15vw;
+  font-size: .2rem;
+  margin-top: -40px;
+  border-radius: 1vw !important;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px !important;
+}
+
 .box-container {
   display: flex; /* Use flexbox for the box layout */
   flex-wrap: wrap; /* Allow boxes to wrap */
-  gap: 15px; /* Space between boxes */
+  gap: 5px; /* Space between boxes */
 }
 
 .box {

@@ -1,6 +1,8 @@
 #pendingTable {
-    transform:scale(0.8);
-    width:100vw;
+    transform:scale(.65);
+    width:150vw;
+    margin-top: -2vw;
+    margin-left: -25vw;
     border-radius: 1vw !important;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px !important;
 }

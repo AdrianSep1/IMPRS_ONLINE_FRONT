@@ -47,11 +47,11 @@ const Navbar = () => {
         const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
         if (isLoggedIn) {
-            fetch(`https://backimps-production.up.railway.app/services/checkAdmin?email=${email}`, { method: 'GET', mode: 'cors', headers: { 'Content-Type': 'application/json' } })
+            fetch(`http://localhost:8080/services/checkAdmin?email=${email}`, { method: 'GET', mode: 'cors', headers: { 'Content-Type': 'application/json' } })
                 .then(response => response.json())
                 .then(() => {
                     setNotifShow('show');
-                    return fetch(`https://backimps-production.up.railway.app/notifications/id?id=${userID}`, { method: 'GET', mode: 'cors', headers: { 'Content-Type': 'application/json' } });
+                    return fetch(`http://localhost:8080/notifications/id?id=${userID}`, { method: 'GET', mode: 'cors', headers: { 'Content-Type': 'application/json' } });
                 })
                 .then(response => response.json())
                 .then(data => setValues(data))
@@ -62,7 +62,7 @@ const Navbar = () => {
     }, []);
 
     const fetchData = () => {
-        fetch('https://backimps-production.up.railway.app/services/all')
+        fetch('http://localhost:8080/services/all')
             .then((response) => response.json())
             .then((data) => {
                 const filteredUsers = data.filter(user => user.role === 'staff' || user.role === 'Faculty Employee' || user.role === 'Office Employee' || user.role === 'admin' || user.role === 'head');
@@ -146,7 +146,7 @@ const Navbar = () => {
 
             // Update user info only if changed
             if (userInfo.email !== localStorage.getItem("email")) {
-                fetch(`https://backimps-production.up.railway.app/services/newEmail?newEmail=${userInfo.email}&email=${localStorage.getItem("email")}`, requestOptions)
+                fetch(`http://localhost:8080/services/newEmail?newEmail=${userInfo.email}&email=${localStorage.getItem("email")}`, requestOptions)
                     .then(() => {
                         localStorage.setItem("email", userInfo.email);
                         setInfoStep(0);
@@ -156,7 +156,7 @@ const Navbar = () => {
                     .catch(console.error);
             }
             if (userInfo.firstName !== localStorage.getItem("firstName") || userInfo.lastName !== localStorage.getItem("lastName")) {
-                fetch(`https://backimps-production.up.railway.app/services/newName?firstName=${userInfo.firstName}&lastName=${userInfo.lastName}&email=${userInfo.email}`, requestOptions)
+                fetch(`http://localhost:8080/services/newName?firstName=${userInfo.firstName}&lastName=${userInfo.lastName}&email=${userInfo.email}`, requestOptions)
                     .then(() => {
                         localStorage.setItem("firstName", userInfo.firstName);
                         localStorage.setItem("lastName", userInfo.lastName);
@@ -185,7 +185,7 @@ const Navbar = () => {
                     }),
                 };
 
-                fetch(`https://backimps-production.up.railway.app/services/newPassword?firstName=${firstName}&lastName=${lastName}&password=${password}&email=${email}&schoolId=${schoolId}&role=${role}`, requestOptions)
+                fetch(`http://localhost:8080/services/newPassword?firstName=${firstName}&lastName=${lastName}&password=${password}&email=${email}&schoolId=${schoolId}&role=${role}`, requestOptions)
                     .then((response) => response.json())
                     .then((data) => {
                         showInfoPop('Password changed successfully!', true);
