@@ -110,10 +110,10 @@ const History = ({reqHistory}) => {
                     mode: 'cors',
                     body: commentData
                   };
-                fetch("http://localhost:8080/comments/newComment", requestOptionsComment)
+                fetch("https://imprsonlineback-production.up.railway.app/comments/newComment", requestOptionsComment)
                 .then((response)=> response.json()
                                         ).then((data) => {
-                                            fetch("http://localhost:8080/comments/id?id=" + requestID, requestOptions).then((response)=> response.json()
+                                            fetch("https://imprsonlineback-production.up.railway.app/comments/id?id=" + requestID, requestOptions).then((response)=> response.json()
                                             ).then((data) => { 
                                                 setComments(data);
                                                 setEditable(true);
@@ -144,7 +144,7 @@ const History = ({reqHistory}) => {
               'Content-Type': 'application/json',
             },
             };
-            fetch("http://localhost:8080/records/completedStatus?requestID=" + requestID + "&status=Completed&email=" + email  + "&userID=" + userID + "&date=" + currentDate, requestOptions).then((response)=> response.json()
+            fetch("https://imprsonlineback-production.up.railway.app/records/completedStatus?requestID=" + requestID + "&status=Completed&email=" + email  + "&userID=" + userID + "&date=" + currentDate, requestOptions).then((response)=> response.json()
             ).then((data) => {window.location.reload();})
             .catch(error =>
                 {
@@ -195,7 +195,7 @@ const History = ({reqHistory}) => {
           },
           };
 
-          fetch("http://localhost:8080/requests/id?id=" + event.data.requestID + "&fileName=" + event.data.fileName, requestOptions).then((response)=> response.json()
+          fetch("https://imprsonlineback-production.up.railway.app/requests/id?id=" + event.data.requestID + "&fileName=" + event.data.fileName, requestOptions).then((response)=> response.json()
             ).then((data) => { 
                 console.log(data);
                 setFileName(data['fileName']);
@@ -225,7 +225,7 @@ const History = ({reqHistory}) => {
                 setRequesterEmail(data['requesterEmail']);
                 setRequesterName(data['requesterName']);
                 setContactNumber(data['requesterNumber']);
-                fetch("http://localhost:8080/records/requestid?id=" + event.data.requestID, requestOptions).then((response)=> response.json()
+                fetch("https://imprsonlineback-production.up.railway.app/records/requestid?id=" + event.data.requestID, requestOptions).then((response)=> response.json()
                 ).then((data) => { 
                     setStatus(data['status']);
                     if(data['status'] === 'Rejected'){
@@ -254,7 +254,7 @@ const History = ({reqHistory}) => {
                         setStatus('Claimed');
                         setStatusClass('capsuleClaimed');
                     } 
-                    fetch("http://localhost:8080/comments/id?id=" + event.data.requestID, requestOptions).then((response)=> response.json()
+                    fetch("https://imprsonlineback-production.up.railway.app/comments/id?id=" + event.data.requestID, requestOptions).then((response)=> response.json()
                     ).then((data) => { 
                         setComments(data);
                         if(data[0].sentBy == 'Head'){
@@ -331,7 +331,7 @@ const History = ({reqHistory}) => {
             },
         };
     
-        fetch("http://localhost:8080/requests/all", requestOptions)
+        fetch("https://imprsonlineback-production.up.railway.app/requests/all", requestOptions)
             .then((response) => response.json())
             .then((data) => {
                 const statusMap = {

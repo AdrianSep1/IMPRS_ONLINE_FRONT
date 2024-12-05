@@ -72,7 +72,7 @@ const UserManagement = () => {
   };
 
   const fetchData = () => {
-    fetch('http://localhost:8080/services/all')
+    fetch('https://imprsonlineback-production.up.railway.app/services/all')
         .then((response) => response.json())
         .then((data) => {
             const filteredUsers = data.filter(user => user.role === 'staff' || user.role === 'Administrative' || user.role === 'Academic');
@@ -104,7 +104,7 @@ const UserManagement = () => {
       },
     };
 
-    fetch('http://localhost:8080/services/all', requestOptions)
+    fetch('https://imprsonlineback-production.up.railway.app/services/all', requestOptions)
       .then((response) => response.json())
       .then((data) => {
         // Filter users based on role
@@ -129,7 +129,7 @@ const UserManagement = () => {
       body: JSON.stringify({ email: userEmail }),
     };
 
-    fetch('http://localhost:8080/services/updateAdminVerified', requestOptions)
+    fetch('https://imprsonlineback-production.up.railway.app/services/updateAdminVerified', requestOptions)
       .then((response) => response.json())
       .then((data) => {
         if (data.status) {
@@ -158,7 +158,7 @@ const UserManagement = () => {
       body: JSON.stringify({ email: userEmail }),
     };
 
-    fetch('http://localhost:8080/services/declineUser', requestOptions)
+    fetch('https://imprsonlineback-production.up.railway.app/services/declineUser', requestOptions)
       .then((response) => response.json())
       .then((data) => {
         if (data.status) {
@@ -201,7 +201,7 @@ const UserManagement = () => {
       body: JSON.stringify({ email: userEmail }),
     };
   
-    fetch('http://localhost:8080/services/deleteUser', requestOptions)
+    fetch('https://imprsonlineback-production.up.railway.app/services/deleteUser', requestOptions)
       .then((response) => response.json())
       .then((data) => {
         if (data.status) {
@@ -277,14 +277,14 @@ const UserManagement = () => {
     }
 
     try {
-        const emailExistsResponse = await fetch(`http://localhost:8080/services/exists?email=${email}`);
+        const emailExistsResponse = await fetch(`https://imprsonlineback-production.up.railway.app/services/exists?email=${email}`);
         const emailExists = await emailExistsResponse.json();
         if (emailExists) {
             showInfoPop('That email is already in use! Please use another email.');
             return;
         }
 
-        const schoolIdExistsResponse = await fetch(`http://localhost:8080/services/exists?schoolId=${schoolId}`);
+        const schoolIdExistsResponse = await fetch(`https://imprsonlineback-production.up.railway.app/services/exists?schoolId=${schoolId}`);
         const schoolIdExists = await schoolIdExistsResponse.json();
         if (schoolIdExists) {
             showInfoPop('That School ID is already in use! Please use another School ID.');
@@ -292,7 +292,7 @@ const UserManagement = () => {
         }
 
         const response = await fetch(
-            `http://localhost:8080/services/NewStaffRegistration?firstName=${firstName}&lastName=${lastName}&password=${password}&email=${email}&schoolId=${schoolId}&role=${role}`,
+            `https://imprsonlineback-production.up.railway.app/services/NewStaffRegistration?firstName=${firstName}&lastName=${lastName}&password=${password}&email=${email}&schoolId=${schoolId}&role=${role}`,
             { method: 'POST', headers: { 'Content-Type': 'application/json' } }
         );
         if (response.ok) {
@@ -339,7 +339,7 @@ const UserManagement = () => {
       }),
     };
   
-    fetch(`http://localhost:8080/services/updateStaff?id=${userId}&firstName=${firstName}&lastName=${lastName}&password=${password}&email=${email}&schoolId=${schoolId}&role=${role}`, requestOptions)
+    fetch(`https://imprsonlineback-production.up.railway.app/services/updateStaff?id=${userId}&firstName=${firstName}&lastName=${lastName}&password=${password}&email=${email}&schoolId=${schoolId}&role=${role}`, requestOptions)
       .then((response) => response.json())
       .then((data) => {
         if (data.status) {

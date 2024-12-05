@@ -53,7 +53,7 @@ const Reports = () => {
 useEffect(() => {
   const fetchData = async () => {
     try {
-      const response = await fetch('http://localhost:8080/requests/all');
+      const response = await fetch('https://imprsonlineback-production.up.railway.app/requests/all');
       const data = await response.json();
       setData(data);
     } catch (error) {
@@ -130,7 +130,7 @@ useEffect(() => {
       },
       };
     
-    fetch("http://localhost:8080/records/getModules?dates=" + date.toISOString().substring(0,10), requestOptions).then((response)=> response.json()
+    fetch("https://imprsonlineback-production.up.railway.app/records/getModules?dates=" + date.toISOString().substring(0,10), requestOptions).then((response)=> response.json()
     ).then((data) => { setModules(data); 
     })
     .catch(error =>
@@ -139,7 +139,7 @@ useEffect(() => {
         }
     );
 
-    fetch("http://localhost:8080/requests/getModuleCopies?dates=" + date.toISOString().substring(0,10), requestOptions).then((response)=> response.json()
+    fetch("https://imprsonlineback-production.up.railway.app/requests/getModuleCopies?dates=" + date.toISOString().substring(0,10), requestOptions).then((response)=> response.json()
     ).then((data) => { setModuleCopies(data); 
     })
     .catch(error =>
@@ -148,7 +148,7 @@ useEffect(() => {
         }
     );
 
-    fetch("http://localhost:8080/records/getOfficeForms?dates=" + date.toISOString().substring(0,10), requestOptions).then((response)=> response.json()
+    fetch("https://imprsonlineback-production.up.railway.app/records/getOfficeForms?dates=" + date.toISOString().substring(0,10), requestOptions).then((response)=> response.json()
     ).then((data) => { setOfficeForms(data);})
     .catch(error =>
         {
@@ -156,7 +156,7 @@ useEffect(() => {
         }
     );
 
-    fetch("http://localhost:8080/requests/getOfficeFormCopies?dates=" + date.toISOString().substring(0,10), requestOptions).then((response)=> response.json()
+    fetch("https://imprsonlineback-production.up.railway.app/requests/getOfficeFormCopies?dates=" + date.toISOString().substring(0,10), requestOptions).then((response)=> response.json()
     ).then((data) => { setOfficeCopies(data);;
     })
     .catch(error =>
@@ -165,7 +165,7 @@ useEffect(() => {
         }
     );
 
-    fetch("http://localhost:8080/records/getExams?dates=" + date.toISOString().substring(0,10), requestOptions).then((response)=> response.json()
+    fetch("https://imprsonlineback-production.up.railway.app/records/getExams?dates=" + date.toISOString().substring(0,10), requestOptions).then((response)=> response.json()
     ).then((data) => { setExams(data); })
     .catch(error =>
         {
@@ -173,7 +173,7 @@ useEffect(() => {
         }
     );
 
-    fetch("http://localhost:8080/requests/getExamCopies?dates=" + date.toISOString().substring(0,10), requestOptions).then((response)=> response.json()
+    fetch("https://imprsonlineback-production.up.railway.app/requests/getExamCopies?dates=" + date.toISOString().substring(0,10), requestOptions).then((response)=> response.json()
     ).then((data) => { setExamCopies(data); 
     })
     .catch(error =>
@@ -182,7 +182,7 @@ useEffect(() => {
         }
     );
 
-    fetch("http://localhost:8080/records/getManuals?dates=" + date.toISOString().substring(0,10), requestOptions).then((response)=> response.json()
+    fetch("https://imprsonlineback-production.up.railway.app/records/getManuals?dates=" + date.toISOString().substring(0,10), requestOptions).then((response)=> response.json()
     ).then((data) => { setManuals(data);})
     .catch(error =>
         {
@@ -190,7 +190,7 @@ useEffect(() => {
         }
     );
 
-    fetch("http://localhost:8080/requests/getManualCopies?dates=" + date.toISOString().substring(0,10), requestOptions).then((response)=> response.json()
+    fetch("https://imprsonlineback-production.up.railway.app/requests/getManualCopies?dates=" + date.toISOString().substring(0,10), requestOptions).then((response)=> response.json()
     ).then((data) => { setManualCopies(data);
     })
     .catch(error =>
@@ -226,7 +226,7 @@ useEffect(() => {
   const header = renderHeader();
 
   useEffect(() => {
-    fetch('http://localhost:8080/records/requestCounts')
+    fetch('https://imprsonlineback-production.up.railway.app/records/requestCounts')
       .then((response) => response.json())
       .then((data) => {
         const totalRequests =

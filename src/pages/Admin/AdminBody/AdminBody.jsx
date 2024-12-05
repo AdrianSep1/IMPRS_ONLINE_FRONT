@@ -24,7 +24,7 @@ function AdminBody() {
             },
         };
 
-        fetch("http://localhost:8080/services/checkAdmin?email=" + localStorage.getItem("email"), requestOptions)
+        fetch("https://imprsonlineback-production.up.railway.app/services/checkAdmin?email=" + localStorage.getItem("email"), requestOptions)
             .then((response) => response.json())
             .then((data) => {
                 if (data !== true) {
@@ -40,7 +40,7 @@ function AdminBody() {
             });
 
         // Set up WebSocket for real-time notifications
-        const ws = new WebSocket('wss://backimps-production.up.railway.app/ws/notifications');
+        const ws = new WebSocket('wss://imprsonlineback-production.up.railway.app/ws/notifications');
 
 
         ws.onopen = () => console.log('Connected to WebSocket for notifications');
